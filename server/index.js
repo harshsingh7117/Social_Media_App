@@ -6,13 +6,17 @@ import dotenv from "dotenv";
 import multer from "multer";
 import helmet from "helmet";
 import morgan from "morgan";
-import path from "path";
+import path, { format } from "path";
 import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth.js"; 
 import userRoutes from "./routes/user.js";
 import postRoutes from "./routes/posts.js";
 import { createPost} from "./controllers/post.js";
 import { register } from "./controllers/auth.js";
+import { verifyToken } from "./middleware/auth.js";
+import User from "./models/User.js";
+import post from "./models/Post.js";
+import { user, posts } from "./data/index.js";
 
 
 /* Configurations */
@@ -57,5 +61,9 @@ mongoose.connect(process.env.MONGO_URL, {
     useUnifiedTopology: true,
 }).then(() => {
     app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
+
+    /* add data one time */
+    // User.insertMany(users);
+    // post.insertMany(posts);
 })
 .catch((error) => console.log(`${error} did not connect`));
